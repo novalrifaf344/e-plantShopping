@@ -1,147 +1,140 @@
-/* LandingPage.css */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  overflow: hidden;
-}
+/* ---------- App.css (hero stays behind; product view blurs hero) ---------- */
 
-.landing-page {
+/* sane reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { height: 100%; }
+
+.app-container { min-height: 100%; background: #f0f0f0; }
+
+/* ===== Landing page (hero) ===== */
+.landing-page{
   position: relative;
-  width: 100vw;
-  height: 100vh;
-  background-color: #f8f8f8;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  border-radius: 12px;
 }
 
-.background-image {
+/* Greenhouse image */
+.background-image{
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background-image: url('https://cdn.pixabay.com/photo/2017/07/13/08/59/greenhouse-2499758_1280.jpg');
-  background-size: 100% 100%;
+  background-size: cover;
   background-position: center;
-  filter: brightness(0.8);
-}
-.content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
- top: 100px;
-  backdrop-filter: blur(4px);
-  background-color: rgba(0,0,0,0.5);
-  gap: 20px;
 }
 
-.landing_content {
- margin-top: 430px;
-  margin-left: 100px;
-  transform: translate(-50%, -50%);
+/* darken hero slightly for legibility while on the hero */
+.background-image::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: rgba(0,0,0,0.45);
+}
+
+/* Main hero content */
+.content{
+  position: relative;
   z-index: 1;
-  text-align: center;
-  /* background-color: red; */
-  width: 400px;
-  height: 400px;
-  display: flex;
+  width: min(1280px, 94%);
+  margin: 0 auto;
+  padding: clamp(24px, 6vw, 72px);
+  min-height: 100vh;
+
+  display: grid;
+  grid-template-columns: minmax(0, 520px) minmax(0, 1fr);
   align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  gap: 10px;
+  gap: clamp(16px, 4vw, 48px);
+  color:#fff;
 }
 
-.content p,
-.content h1 {
-  color: white;
+.landing_content{
+  display:flex;
+  flex-direction:column;
+  gap: clamp(10px, 2.5vw, 16px);
+  align-items:flex-start;
 }
-
-.content h1 {
-  font-size: 48px;
-  margin-bottom: 10px;
+.landing_content h1{
+  line-height:1.1;
+  font-size: clamp(2.2rem, 5.2vw, 3.6rem);
+  color:#fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.35);
 }
-
-.content p {
-  font-size: 25px;
+.landing_content p{
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  color:#e9f7ef;
 }
-
-.divider {
-  width: 50px;
-  height: 2px;
-  background-color: #4caf50;
-  margin: 10px 0;
+.divider{ width:64px; height:6px; border-radius:999px; background:#35b04b; }
+.get-started-button{
+  background:#4CAF50; color:#fff; border:none; border-radius:10px;
+  padding:14px 24px; font-size: clamp(1rem, 2vw, 1.125rem);
+  cursor:pointer; transition: transform .15s ease, background-color .2s ease;
+  margin-top: 8px;
 }
+.get-started-button:hover{ background:#43a047; transform: translateY(-1px); }
 
-.get-started-button {
-  padding: 15px 25px;
-  font-size: 23px;
-  border: none;
-  border-radius: 5px;
-  background-color: #4caf50;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 40px;
+/* About box */
+.aboutus_container{
+  background: rgba(76, 175, 80, 0.20);
+  border: 1px solid rgba(76,175,80,0.35);
+  border-radius: 14px;
+  padding: clamp(14px, 2.6vw, 24px);
+  color:#fff;
+  line-height:1.65;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  backdrop-filter: blur(3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  width: 100%;
+  max-width: 760px;
+  overflow-wrap: anywhere;
 }
-
-.get-started-button:hover {
-  background-color: #45a049;
+.aboutus_container h1,
+.aboutus_container h2,
+.aboutus_container h3{
+  margin: 0 0 12px 0;
+  font-size: clamp(1.1rem, 2.4vw, 1.6rem);
+  line-height: 1.3;
+  color:#ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.35);
 }
+.aboutus_container p{ color:#f4fff5; }
 
-/* ProductList.css */
+/* Brand color */
+.brand{ color: aqua; }
 
-.product-list-container {
-  position: absolute;
-  overflow-x: hidden;
-  top: 100vh;
-  /* Initially off-screen */
+/* Fade when switching to products */
+.fade-out{ opacity:0; transform: scale(0.98); transition: opacity .28s ease, transform .28s ease; }
+
+/* ===== Product list overlay =====
+   This panel is TRANSPARENT and applies a strong backdrop blur
+   so you see the hero/landing page blurred behind it. */
+.product-list-container{
+  position: fixed;
   left: 0;
+  top: 100vh;                 /* off-screen until shown */
   width: 100%;
   height: 100vh;
-  background-color: rgba(255, 255, 255, 0.9);
-  /* Adjust background opacity as needed */
-  transition: top 0.5s ease;
-  /* Smooth transition for top property */
-  overflow-y: auto;
-  /* Enable vertical scrolling */
-  z-index: 2;
-  /* Ensure it's above landing page content */
-  backdrop-filter: blur(5px);
+
+  /* Keep almost transparent; rely on backdrop-filter to blur the hero */
+  background: rgba(255,255,255,0.06);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  backdrop-filter: blur(16px) saturate(120%);
+
+  overflow-y:auto;
+  transition: top .5s ease;
+  z-index: 20;
+}
+.product-list-container.visible{ top:0; }
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px){
+  .content{ grid-template-columns: 1fr; text-align:center; }
+  .landing_content{ align-items:center; }
+  .get-started-button{ align-self:center; }
+  .aboutus_container{ margin: 0 auto; }
 }
 
-.product-list-container.visible {
-  top: 0;
-}
-/* LandingPage.css */
-@media screen and (max-width: 768px) {
-  .content {
-    flex-direction: column;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-  }
-
-  .landing_content {
-    margin-top: 100px; /* Adjust as needed */
-    margin-left: 0;
-    width: 80%; /* Adjust as needed */
-    text-align: center;
-  }
-
-  .aboutus_container {
-    margin-top: 20px; /* Adjust as needed */
-    width: 80%; /* Adjust as needed */
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .landing_content {
-    margin-top: 50px; /* Adjust as needed */
-    width: 90%; /* Adjust as needed */
-  }
-
-  .aboutus_container {
-    width: 90%; /* Adjust as needed */
-  }
+@media (max-width: 480px){
+  .landing_content h1{ font-size: clamp(1.8rem, 9vw, 2.2rem); }
+  .aboutus_container{ padding: 12px; max-width: 100%; }
 }
